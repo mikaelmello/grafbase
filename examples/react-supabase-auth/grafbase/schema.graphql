@@ -1,0 +1,17 @@
+schema
+  @auth(
+    providers: [
+      {
+        type: jwt
+        issuer: "https://supabase.com"
+        secret: "lCbCorL2CBNhtvaZoZbMwzDqkuyYDG8QuDMj7dhTiSF4sxmPy93fOprHo+NKeSkbJP+BUAaWlwzwPtj7IFhW/w=="
+      }
+    ]
+    rules: [{ allow: private, operations: [read] }]
+  ) {
+  query: Query
+}
+
+type Message @model {
+  body: String
+}
