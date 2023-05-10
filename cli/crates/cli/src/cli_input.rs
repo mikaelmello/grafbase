@@ -1,5 +1,78 @@
-use clap::{arg, command, value_parser, Arg, ArgAction, ArgGroup, Command};
+use clap::{arg, command, value_parser, Arg, ArgAction, ArgGroup, Command, Parser};
 use indoc::indoc;
+
+#[derive(Debug, Parser)]
+pub(crate) struct DevCommand {
+    /// Use a specific port
+    #[arg(short, long, default_value_t = 4000)]
+    pub(crate) port: u16,
+    /// If a given port is unavailable, search for another
+    #[arg(short, long)]
+    pub(crate) search: bool,
+    /// Do not listen for schema changes and reload
+    #[arg(long)]
+    pub(crate) disable_watch: bool,
+}
+
+#[derive(Debug, Parser)]
+pub(crate) struct CompletionsCommand {
+    /// The shell to generate completions for.
+    /// Supported: bash, fish, zsh, elvish, powershell
+    pub(crate) shell: String,
+}
+
+#[derive(Debug, Parser)]
+pub(crate) struct InitCommand {
+    /// The name of the project to create
+    pub(crate) name: String,
+    /// The name or GitHub URL of the template to use for the new project
+    #[arg(short, long)]
+    pub(crate) template: String,
+}
+
+#[derive(Debug, Parser)]
+pub(crate) struct CreateCommand {
+    /// The name to use for the new project
+    pub(crate) name: String,
+    /// The slug of the account in which the new project should be created
+    pub(crate) account: String,
+    /// The regions in which the database for the new project should be created
+    pub(crate) regions: Vec<String>,
+}
+
+#[derive(Debug, Parser)]
+pub(crate) enum SubCommand {
+    /// Run your Grafbase project locally
+    Dev(DevCommand),
+    /// Output completions for the chosen shell
+    /// To use, write the output to the appropriate location for your shell
+    Completions(CompletionsCommand),
+    /// Sets up the current or a new project for Grafbase
+    Init(InitCommand),
+    /// Resets the local database for the current project
+    Reset,
+    /// Logs into your Grafbase account
+    Login,
+    /// Logs out of your Grafbase account
+    Logout,
+    /// Set up and deploy a new project
+    Create(CreateCommand),
+    /// Deploy your project
+    Deploy,
+    /// Connect a local project to a remote project
+    Link,
+    /// Disconnect a local project from a remote project
+    Unlink,
+}
+
+#[derive(Debug, Parser)]
+pub(crate) struct Args {
+    /// Set tracing level
+    #[arg(short, long, default_value_t = 0)]
+    pub(crate) trace: u16,
+    #[command(subcommand)]
+    pub(crate) command: SubCommand,
+}
 
 /// creates the cli interface
 #[must_use]

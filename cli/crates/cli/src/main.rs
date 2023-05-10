@@ -21,6 +21,7 @@ mod watercolor;
 extern crate log;
 
 use crate::{
+    cli_input::Args,
     create::{create, CreateArguments},
     deploy::deploy,
     dev::dev,
@@ -31,6 +32,7 @@ use crate::{
     reset::reset,
     unlink::unlink,
 };
+use clap::Parser;
 use cli_input::build_cli;
 use common::{
     consts::{DEFAULT_LOG_FILTER, TRACE_LOG_FILTER},
@@ -47,15 +49,9 @@ fn main() {
 
     ShouldColorize::from_env();
 
-    let exit_code = match try_main() {
-        Ok(_) => 0,
-        Err(error) => {
-            report::error(&error);
-            1
-        }
-    };
+    let args = Args::parse();
 
-    process::exit(exit_code);
+    //process::exit(0);
 }
 
 fn try_main() -> Result<(), CliError> {
