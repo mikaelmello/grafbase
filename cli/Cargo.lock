@@ -1696,6 +1696,7 @@ dependencies = [
  "strum",
  "thiserror",
  "ulid",
+ "which",
 ]
 
 [[package]]
@@ -1724,7 +1725,6 @@ dependencies = [
  "slug",
  "sqlx",
  "strip-ansi-escapes",
- "strum",
  "tantivy",
  "tar",
  "tempfile",
